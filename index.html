@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>draw_lines_by_ratio</title>
+        <script type="text/javascript" src="../Delaunay/trigulate/delaunay.js">//这是三角剖分的方法集</script>
+        <script type="text/javascript" src="get_data.js">//这是获取数据的方法集</script>
+        <script type="text/javascript" src="initial.js">//这是将所需输入数据初始化的文件</script>
+        <script type="text/javascript" src="draw_lines.js">//这是绘制等高线的方法集</script>
+        <script type="text/javascript" src="sequence.js">//将draw_lines_by_ratio的结果顺序排列</script>
+        <!-- <script type="text/javascript" src="smoth.js">//三次样条插值</script> -->
+        <script type="text/javascript" src="../sylvester/sylvester.js">//矩阵计算方法</script>
+        <script type="text/javascript" src="bezierSmoth.js">//贝塞尔曲线</script>
+        <script type="text/javascript" src="twiceSmothDeputy.js">//抛物样条曲线</script>
+        <script type="text/javascript" src="thirdSpline.js">//三次样条曲线</script>
+        <script type="text/javascript" src="bSpline.js">//三次B样条曲线</script>
+    </head>
+    <body>
+        <!-- <p>画布的长宽以及坐标的缩放比例需根据数据的坐标范围来设计</p> -->
+        <canvas id="canvas" width="4000" height="4000">
+        </canvas>
+
+        <script type="text/javascript">
+            /* 对于新输入的数据，需要做以下处理： */
+            /* 1.将数据处理成和画布规格相符的数据,放入initial.js中 */
+            /* 2.根据要求更改initial.js中的所有目标值targets */
+            /* 3.将draw_lines.js文件中的find_two_points方法的“1”改成合理的大小，一般是不用改的 */
+            /* 4.选取合适的方法生成曲线 */
+
+            console.time('allprogram')
+
+            /* ------------------生成坐标------------------ */
+            let canvas = document.getElementById("canvas"),
+                ctx = canvas.getContext("2d")
+            let vertices, i;
+            //随机生成二维坐标
+            //vertices = Get_vertices.get_ramdon_2d_vertices(canvas, ramdon_sum)
+
+            //随机生成三维坐标
+            // vertices = Get_vertices.get_ramdon_3d_vertices(canvas, ramdon_sum)
+
+            //生成确定的坐标
+            // vertices = Get_vertices.get_some_test_vertices(origin_points)
+
+            //生成处理为标准数据的地理坐标数据(引入外部数据)
+            vertices = Get_vertices.get_complex_vertices(datas_10000)
+
+
+            /* ------------------三角剖分------------------ */
+            console.time('triangulate')
+            let triangles = Delaunay.triangulate(vertices)
+            //绘制三角形
+            // for(i = triangles.length; i; ) {
+            //   ctx.beginPath();
+            //   --i; ctx.moveTo(vertices[triangles[i]][0], vertices[triangles[i]][1]);
+            //   --i; ctx.lineTo(vertices[triangles[i]][0], vertices[triangles[i]][1]);
+            //   --i; ctx.lineTo(vertices[triangles[i]][0], vertices[triangles[i]][1]);
+            //   ctx.closePath();
+            //   ctx.stroke();
+            // }
+            console.timeEnd('triangulate')
+
+            /* ------------------找等值线------------------ */
+            let results,allEdges,allObj
+            console.time('same_high')
+            results = Draw_lines_by_ratio.Find_edges_of_same_high(vertices,triangles,targets)
+            allEdges = results.edges        //仅用于画图
+            allObj = results.obj            //包含obj和points，obj为每个点与其邻接点的集合，points为所有等值点的坐标
+            //console.log(allEdges,allObj)
+            //绘制等高线
+            // Draw_lines_by_ratio.Draw_lines(ctx,targets,allEdges)
+            console.timeEnd('same_high')
+
+            /* ------------------边排序------------------ */
+            console.time('sequence')
+            //为allObj新增两个属性“sequenceEdges”和“sequencePoints”，分别包含排序后的边集和点集
+            allObj = Sequence_line.sequence(allObj,targets)     
+            //console.log(allObj)
+            console.timeEnd('sequence')
+
+            /* ------------------折线平滑------------------ */
+            console.time('smoth')
+            //三次样条插值--只适合横向折线，不支持折线纵向或横向的反向折回
+            // thirdSpline.smoth(targets, allObj, choice, Matrix, ctx, splitRate)
+
+            //抛物样条插值--光滑性不太行
+            // twiceSmoth.smoth(targets, allObj, ctx, splitRate)
+
+            //贝塞尔曲线
+            bezierSmoth.smoth(allObj, targets, ctx)
+            
+            //B样条（贝塞尔的衍生算法）--推测其性能最优
+            
+            console.timeEnd('smoth')
+            console.timeEnd('allprogram')
+        </script>
+    </body>
+</html>
+
+
+
+
