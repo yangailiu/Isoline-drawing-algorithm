@@ -87,7 +87,7 @@ let Smoth
         // console.log(dely1,dely2)
     }
 
-    function draw_smoth_line(ctx, abcd, len, n)
+    function drawSmothLine(ctx, abcd, len, n)
     {
         let i,j,newX,newY
         for(i = 0;i<len-1;i++)
@@ -145,7 +145,7 @@ let Smoth
 
                     abcd = sylSmoth(allIdx[j],vertices,choice,Matrix)
                     //将每一条线段分成n份来画
-                    draw_smoth_line(ctx, abcd, len, n)
+                    drawSmothLine(ctx, abcd, len, n)
 
                     ////将闭合区域分为两块,暂不可行。。
                     // twoEgdes = find_two_edges(allIdx[j],vertices)
@@ -155,9 +155,9 @@ let Smoth
                     //     length = twoEgdes[l].length
                     //     abcd = sylSmoth(twoEgdes[l],vertices,choice,Matrix)
                     //     //将每一条线段分成n份来画
-                    //     draw_smoth_line(ctx, abcd, length, n)
+                    //     drawSmothLine(ctx, abcd, length, n)
                     // }
-                    // draw_smoth_line(ctx, abcd, len, n)
+                    // drawSmothLine(ctx, abcd, len, n)
                 }
             }
         }

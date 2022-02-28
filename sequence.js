@@ -1,7 +1,7 @@
-let Sequence_line
+let sequenceLine
 (function()
 {
-    Sequence_line =
+    sequenceLine =
     {
         sequence:function(allObj,targets)
         {
@@ -99,5 +99,5 @@ let Sequence_line
         }
     }
     if (typeof module !== "undefined")
-        module.exports = Sequence_line
+        module.exports = sequenceLine
 })()

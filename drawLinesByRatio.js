@@ -4,17 +4,17 @@
 /* 和原始方法一样，将所有点的邻接点保存在一个对象中，对象的查找方法与之前不同 */
 /* 原始方法将点的x+"+"+y作为键，本脚本中的方法用点在数组中的索引作为键 */
 
-/* Find_edges_of_same_high方法接收所有初始点、delaunay输出结果以及所有targets */
+/* findEdgesOfSameHigh方法接收所有初始点、delaunay输出结果以及所有targets */
 /* 返回值为两个 */
 /* 一个是所有的边，用于后续在画布上的绘制 */
 /* 另一个是一个对象，该对象又包含两个对象，一个是所有等高点集，另一个是所有点的邻接点 */
 /* 以上两个对象都以targets高程值为键作为分类，每个高程值对应的点的邻接点分别保存 */
 
-/* Draw_lines方法用于绘制等高线，代码简单不加赘述 */
+/* DrawLines方法用于绘制等高线，代码简单不加赘述 */
 
 /* 注意一下第46行，需要根据输入数据的高程值范围进行选择更改 */
 
-let Draw_lines_by_ratio
+let drawLinesByRatio
 (function()
 {
     //将Delaunay的结果三个三个分为一组，返回一个数组，数组每一项都是三个元素，每个元素都是一个索引，指向初始vertices中的某一点
@@ -29,7 +29,7 @@ let Draw_lines_by_ratio
     }
 
     //传入三个点，两两组成一条边，在每一条边上查找是否有等高线穿过，如果有，就将两点组成的边加入到相应的等高线集合中
-    function find_two_points(idx,targets,vertices,allEdges)
+    function findTwoPoints(idx,targets,vertices,allEdges)
     {
         let i,j,nums = [0,1,2,0,1],points
         
@@ -40,7 +40,7 @@ let Draw_lines_by_ratio
                 if(vertices[idx[j]][2]==targets[i])
                 {
                     //注意！！！这里的1可以根据targets的大小范围更改，但是不可以太小，不然在后续的计算中加了和没加没有区别
-                    //记得设置1为其他值之后，检查一下Find_edges_of_same_high输出的obj是否存在一个点有两个以上邻接点的情况
+                    //记得设置1为其他值之后，检查一下findEdgesOfSameHigh输出的obj是否存在一个点有两个以上邻接点的情况
                     //如果有的话很可能是因为这里的1设置的太小了，因为之前这里设置的0.1，导致运算结果四舍五入之后没有差别，一个点有四个邻接点
                     vertices[idx[j]][2] += 1
                 }
@@ -105,10 +105,10 @@ let Draw_lines_by_ratio
         return {allPoints:allPoints,obj:obj,idxForm:idxForm}
     }
 
-    Draw_lines_by_ratio =
+    drawLinesByRatio =
     {
         //输入原始点集，Delaunay三角剖分的结果以及所有目标高程值
-        Find_edges_of_same_high : function(vertices,triangles,targets)
+        findEdgesOfSameHigh : function(vertices,triangles,targets)
         {
             let idxArr,i,j,allEdges = {}
             idxArr = get_three_points(triangles)
@@ -121,7 +121,7 @@ let Draw_lines_by_ratio
             //查找所有边上是否有所需高程值的点，如果有则加入对象中对应的高程值属性中
             for(i = 0;i<idxArr.length;i++)
             {
-                allEdges = find_two_points(idxArr[i],targets,vertices,allEdges)
+                allEdges = findTwoPoints(idxArr[i],targets,vertices,allEdges)
             }
             //console.log(allEdges)
 
@@ -149,7 +149,7 @@ let Draw_lines_by_ratio
         },
 
         //绘制等高线
-        Draw_lines : function(ctx,targets,objects)
+        DrawLines : function(ctx,targets,objects)
         {
             let lines
             ctx.strokeStyle="#191970"

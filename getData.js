@@ -1,19 +1,19 @@
-/* 该文件定义对象Get_vertices，其中包含四种不同的数据集 */
+/* 该文件定义对象getVertices，其中包含四种不同的数据集 */
 
-/* get_ramdon_2d_vertices(points_sum)方法返回‘points_sum’个随机二维坐标 */
-/* get_ramdon_3d_vertices(points_sum)方法返回‘points_sum’个随机三维坐标 */
-/* get_some_test_vertices(origin_points)方法将[0,10]范围内的原始坐标处理为符合规范的点坐标 */
-/* get_complex_data(datas)将datas处理为标准坐标 */
+/* getRamdon2dVertices(pointsSum)方法返回‘pointsSum’个随机二维坐标 */
+/* getRamdon3dVertices(pointsSum)方法返回‘pointsSum’个随机三维坐标 */
+/* getSomeTestVertices(originPoints)方法将[0,10]范围内的原始坐标处理为符合规范的点坐标 */
+/* getComplexVertices(datas)将datas处理为标准坐标 */
 
 
-var Get_vertices
+var getVertices
 (function(){
     //求所有数据x，y坐标的最大最小值，并将z坐标规范化处理
     function getOuterData(data)
     {
-        let new_data = []
-        let all_datas = []
-        let i,x,y,z,min_x=1000000,max_x=0,min_y=10000000,max_y=0,min_z=1000000,max_z=0
+        let newData = []
+        let allDatas = []
+        let i,x,y,z,minX=1000000,maxX=0,minY=10000000,maxY=0,minZ=1000000,maxZ=0
         for(i = 0;i<data.length;i++){
             // 检查异常点并排除
             // if(data[i][2]>10) console.log(data[i][2])
@@ -23,41 +23,41 @@ var Get_vertices
             //     console.log('点',data[i],'与其他点高程值差距很大')
             // }
 
-            new_data = []
+            newData = []
             x = Number(data[i][0])
             y = Number(data[i][1])
             z = Number(data[i][2])*1000
 
-            min_x = Math.min(x,min_x)
-            max_x = Math.max(x,max_x)
-            min_y = Math.min(y,min_y)
-            max_y = Math.max(y,max_y)
-            min_z = Math.min(z,min_z)
-            max_z = Math.max(z,max_z)
+            minX = Math.min(x,minX)
+            maxX = Math.max(x,maxX)
+            minY = Math.min(y,minY)
+            maxY = Math.max(y,maxY)
+            minZ = Math.min(z,minZ)
+            maxZ = Math.max(z,maxZ)
 
-            new_data.push(x)
-            new_data.push(y)
-            new_data.push(Math.round(z))
-            //console.log(new_data)
-            all_datas.push(new_data)
+            newData.push(x)
+            newData.push(y)
+            newData.push(Math.round(z))
+            //console.log(newData)
+            allDatas.push(newData)
         }
         return  {
-                    vertices : all_datas,
-                    min_x : Math.floor(min_x),
-                    max_x : Math.ceil(max_x),
-                    min_y : Math.floor(min_y),
-                    max_y : Math.ceil(max_y),
-                    min_z : min_z,
-                    max_z : max_z
+                    vertices : allDatas,
+                    minX : Math.floor(minX),
+                    maxX : Math.ceil(maxX),
+                    minY : Math.floor(minY),
+                    maxY : Math.ceil(maxY),
+                    minZ : minZ,
+                    maxZ : maxZ
                 }
     }
 
-    Get_vertices = 
+    getVertices = 
     {
-        get_ramdon_2d_vertices : function(canvas,points_sum){
+        getRamdon2dVertices : function(canvas,pointsSum){
             let vertices = []
             let i,x,y
-            for(i = points_sum; i--; ) 
+            for(i = pointsSum; i--; ) 
             {
                 do 
                 {
@@ -72,11 +72,11 @@ var Get_vertices
             return vertices
         },
 
-        get_ramdon_3d_vertices : function(canvas,points_sum)
+        getRamdon3dVertices : function(canvas,pointsSum)
         {
             let vertices = []
             let i,x,y
-            for(i = points_sum; i--; )
+            for(i = pointsSum; i--; )
             {
                 do 
                 {
@@ -93,7 +93,7 @@ var Get_vertices
             return vertices
         },
 
-        // get_160000_datas : function(datas)
+        // get160000Datas : function(datas)
         // {
         //     let i,x,y,z
         //     let vertices = []
@@ -107,53 +107,53 @@ var Get_vertices
         //     return vertices
         // },
 
-        get_some_test_vertices : function(origin_points)
+        getSomeTestVertices : function(originPoints)
         {
             let i,x,y,z
             let vertices = []
-            for(i = origin_points.length; i--; ) 
+            for(i = originPoints.length; i--; ) 
             {
-                x = origin_points[i][0].toFixed(3)*1000/10
-                y = origin_points[i][1].toFixed(3)*1000/10
-                z = origin_points[i][2]
+                x = originPoints[i][0].toFixed(3)*1000/10
+                y = originPoints[i][1].toFixed(3)*1000/10
+                z = originPoints[i][2]
                 vertices[i] = [x, y, z]
             }
             return vertices
         },
 
         //处理大量测试数据为标准数据
-        get_complex_vertices : function(datas)
+        getComplexVertices : function(datas)
         {
-            let i,new_datas,vertice = [],vertices = [],
-                min_x,max_x,min_y,max_y,min_z,max_z
+            let i,newDatas,vertice = [],vertices = [],
+                minX,maxX,minY,maxY,minZ,maxZ
                 //x_range,y_range,z_range
 
-            new_datas = getOuterData(datas)
-            vertices = new_datas.vertices
-            min_x = new_datas.min_x
-            max_x = new_datas.max_x
-            min_y = new_datas.min_y
-            max_y = new_datas.max_y
-            min_z = new_datas.min_z
-            max_z = new_datas.max_z
+            newDatas = getOuterData(datas)
+            vertices = newDatas.vertices
+            minX = newDatas.minX
+            maxX = newDatas.maxX
+            minY = newDatas.minY
+            maxY = newDatas.maxY
+            minZ = newDatas.minZ
+            maxZ = newDatas.maxZ
 
             // console.log(getOuterData(datas))
-            x_range = max_x-min_x
-            y_range = max_y-min_y
-            console.log('x最小值=',min_x,'x最大值=',max_x,'x范围大约是：',x_range)
-            console.log('y最小值=',min_y,'y最大值=',max_y,'y范围大约是：',y_range)
-            console.log('z最小值=',min_z,'z最大值=',max_z)
+            x_range = maxX-minX
+            y_range = maxY-minY
+            console.log('x最小值=',minX,'x最大值=',maxX,'x范围大约是：',x_range)
+            console.log('y最小值=',minY,'y最大值=',maxY,'y范围大约是：',y_range)
+            console.log('z最小值=',minZ,'z最大值=',maxZ)
 
             for(i = 0;i<vertices.length;i++){
                 vertice = vertices[i]
-                // vertice[0] = (vertice[0]-min_x)/20
-                // vertice[1] = (vertice[1]-min_y)/20
-                vertice[0] = Number(((vertice[0]-min_x)/20).toFixed(3))
-                vertice[1] = Number(((vertice[1]-min_y)/20).toFixed(3))
+                // vertice[0] = (vertice[0]-minX)/20
+                // vertice[1] = (vertice[1]-minY)/20
+                vertice[0] = Number(((vertice[0]-minX)/20).toFixed(3))
+                vertice[1] = Number(((vertice[1]-minY)/20).toFixed(3))
             }
             return vertices
         }
     }
     if (typeof module !== "undefined")
-        module.exports = Get_vertices
+        module.exports = getVertices
 })();

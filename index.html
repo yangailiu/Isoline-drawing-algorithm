@@ -2,12 +2,12 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <title>draw_lines_by_ratio</title>
+        <title>drawLinesByRatio</title>
         <script type="text/javascript" src="../Delaunay/trigulate/delaunay.js">//这是三角剖分的方法集</script>
-        <script type="text/javascript" src="get_data.js">//这是获取数据的方法集</script>
+        <script type="text/javascript" src="getData.js">//这是获取数据的方法集</script>
         <script type="text/javascript" src="initial.js">//这是将所需输入数据初始化的文件</script>
-        <script type="text/javascript" src="draw_lines.js">//这是绘制等高线的方法集</script>
-        <script type="text/javascript" src="sequence.js">//将draw_lines_by_ratio的结果顺序排列</script>
+        <script type="text/javascript" src="drawLinesByRatio.js">//这是绘制等高线的方法集</script>
+        <script type="text/javascript" src="sequence.js">//将drawLinesByRatio的结果顺序排列</script>
         <!-- <script type="text/javascript" src="smoth.js">//三次样条插值</script> -->
         <script type="text/javascript" src="../sylvester/sylvester.js">//矩阵计算方法</script>
         <script type="text/javascript" src="bezierSmoth.js">//贝塞尔曲线</script>
@@ -24,7 +24,7 @@
             /* 对于新输入的数据，需要做以下处理： */
             /* 1.将数据处理成和画布规格相符的数据,放入initial.js中 */
             /* 2.根据要求更改initial.js中的所有目标值targets */
-            /* 3.将draw_lines.js文件中的find_two_points方法的“1”改成合理的大小，一般是不用改的 */
+            /* 3.将drawLinesByRatio.js文件中的findTwoPoints方法的“1”改成合理的大小，一般是不用改的 */
             /* 4.选取合适的方法生成曲线 */
 
             console.time('allprogram')
@@ -34,16 +34,16 @@
                 ctx = canvas.getContext("2d")
             let vertices, i;
             //随机生成二维坐标
-            //vertices = Get_vertices.get_ramdon_2d_vertices(canvas, ramdon_sum)
+            //vertices = getVertices.getRamdon2dVertices(canvas, ramdonSum)
 
             //随机生成三维坐标
-            // vertices = Get_vertices.get_ramdon_3d_vertices(canvas, ramdon_sum)
+            // vertices = getVertices.getRamdon3dVertices(canvas, ramdonSum)
 
             //生成确定的坐标
-            // vertices = Get_vertices.get_some_test_vertices(origin_points)
+            // vertices = getVertices.getSomeTestVertices(originPoints)
 
             //生成处理为标准数据的地理坐标数据(引入外部数据)
-            vertices = Get_vertices.get_complex_vertices(datas_10000)
+            vertices = getVertices.getComplexVertices(datas10000)
 
 
             /* ------------------三角剖分------------------ */
@@ -62,19 +62,19 @@
 
             /* ------------------找等值线------------------ */
             let results,allEdges,allObj
-            console.time('same_high')
-            results = Draw_lines_by_ratio.Find_edges_of_same_high(vertices,triangles,targets)
+            console.time('sameHigh')
+            results = drawLinesByRatio.findEdgesOfSameHigh(vertices,triangles,targets)
             allEdges = results.edges        //仅用于画图
             allObj = results.obj            //包含obj和points，obj为每个点与其邻接点的集合，points为所有等值点的坐标
             //console.log(allEdges,allObj)
             //绘制等高线
-            // Draw_lines_by_ratio.Draw_lines(ctx,targets,allEdges)
-            console.timeEnd('same_high')
+            // drawLinesByRatio.DrawLines(ctx,targets,allEdges)
+            console.timeEnd('sameHigh')
 
             /* ------------------边排序------------------ */
             console.time('sequence')
             //为allObj新增两个属性“sequenceEdges”和“sequencePoints”，分别包含排序后的边集和点集
-            allObj = Sequence_line.sequence(allObj,targets)     
+            allObj = sequenceLine.sequence(allObj,targets)     
             //console.log(allObj)
             console.timeEnd('sequence')
 

@@ -73,7 +73,7 @@ let thirdSpline
         return {a:a, b:b, c:c, d:d, x:x, y:y, deltaX:deltaX, deltaY:deltaY, deltaK:deltaK}
     }
 
-    function draw_smoth_line(ctx, abcd, len, n)
+    function drawSmothLine(ctx, abcd, len, n)
     {
         let i,j,newX,newY
         for(i = 0;i<len-1;i++)
@@ -95,7 +95,7 @@ let thirdSpline
         }
     }
 
-    function find_two_edges(allIdx,vertices)
+    function findTwoEdges(allIdx,vertices)
     {
         let minX = 10000, minIdx = 0, maxX = 0, maxIdx = 0,x
         for(i = 0;i<allIdx.length;i++)
@@ -129,16 +129,16 @@ let thirdSpline
                     len = allIdx[j].length
                     abcd = sylSmoth(allIdx[j],vertices,choice,Matrix)
                     //将每一条线段分成n份来画
-                    draw_smoth_line(ctx, abcd, len, n)
+                    drawSmothLine(ctx, abcd, len, n)
 
                     // //将闭合区域分为两块,暂不可行。。
-                    // twoEgdes = find_two_edges(allIdx[j],vertices)
+                    // twoEgdes = findTwoEdges(allIdx[j],vertices)
                     // for(l = 0;l<twoEgdes.length;l++)
                     // {
                     //     length = twoEgdes[l].length
                     //     abcd = sylSmoth(twoEgdes[l],vertices,choice,Matrix)
                     //     //将每一条线段分成n份来画
-                    //     draw_smoth_line(ctx, abcd, length, n)
+                    //     drawSmothLine(ctx, abcd, length, n)
                     // }
                 }
             }
