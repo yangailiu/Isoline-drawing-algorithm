@@ -1,2 +1,2 @@
-# Isoline-drawing-algorithm
+# same_value_curve_algorithm
 Delaunay, Interpolation, line to curve(bezier, spline)...
